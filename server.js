@@ -5,8 +5,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const adminRoutes = require('./routes/admin');
 const paymentRoutes = require('./routes/payment');
-const { calculateDailyProfits } = require('./controllers/userController');
-const { distributeWeeklySalaries, distributeMonthlySalaries } = require('./controllers/adminController');
+const { calculateDailyProfits, calculateDailyReferralProfits } = require('./controllers/userController');
 const { sendSmsCode } = require('./controllers/authController'); // Corrected the import path
 const cron = require('node-cron');
 const cors = require('cors');
@@ -36,8 +35,7 @@ app.use('/api/v1/payment', paymentRoutes);
 
 // Schedule daily, weekly, and monthly jobs
 cron.schedule('0 0 * * *', calculateDailyProfits);
-cron.schedule('0 0 * * 0', distributeWeeklySalaries);
-cron.schedule('0 0 1 * *', distributeMonthlySalaries);
+cron.schedule('0 0 * * *', calculateDailyReferralProfits); 
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

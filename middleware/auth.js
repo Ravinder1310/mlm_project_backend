@@ -39,3 +39,13 @@ exports.adminProtect = async (req, res, next) => {
     return res.status(401).json({ error: 'Not authorized' });
   }
 };
+
+exports.loginMiddleware = async(req,res,next) => {
+  try {
+     const decode = jwt.verify(req.headers.authorization,process.env.JWT_SECRET);
+     req.user = decode;
+     next()
+  } catch (error) {
+     console.log(error);
+  }
+}
